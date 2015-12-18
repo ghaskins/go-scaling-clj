@@ -17,7 +17,7 @@
   (println msg)
   (System/exit status))
 
-(defn launchone [output]
+(defn asyncecho [output]
   (let [input (async/chan)]
     (async/go (while (if-let [msg (async/<! input)]
                        (async/>! output msg)
@@ -27,7 +27,7 @@
 
 (defn launch [count]
   (let [input (async/chan 100)]
-    (map (fn [i] (launchone input)) (range count))))
+    (map (fn [i] (asyncecho input)) (range count))))
 
 (defn -main [& args]
   (let [{:keys [options arguments errors summary]} (parse-opts args cli-options)]
